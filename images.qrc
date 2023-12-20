@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>images/images/0.png</file>
+        <file>images/images/1.png</file>
+        <file>images/images/2.png</file>
+        <file>images/images/3.png</file>
+        <file>images/images/4.png</file>
+        <file>images/images/5.png</file>
+        <file>images/images/6.png</file>
+        <file>images/images/7.png</file>
+        <file>images/images/8.png</file>
+        <file>images/images/9.png</file>
+        <file>images/images/10.png</file>
+        <file>images/images/11.png</file>
+        <file>images/images/12.png</file>
+        <file>images/images/13.png</file>
+        <file>images/images/14.png</file>
+        <file>images/images/15.png</file>
+        <file>images/images/16.png</file>
+        <file>images/images/17.png</file>
+        <file>images/images/18.png</file>
+        <file>images/images/19.png</file>
+        <file>images/images/20.png</file>
+        <file>images/images/21.png</file>
+        <file>images/images/22.png</file>
+        <file>images/images/23.png</file>
+        <file>images/images/24.png</file>
+        <file>images/images/puzzle.jpg</file>
+    </qresource>
+</RCC>
