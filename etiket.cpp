@@ -2,6 +2,9 @@
 #include <QMimeData>   //MimeData sınıfının alt metotlarına erişmemizi sağlar
 //Sürükle bırak işlemlerini yapar
 #include <QDrag>
+#include <QDebug>
+
+#include "mainwindow.h"
 
 etiket::etiket(QWidget *parent) : QLabel(parent)
 {
@@ -10,6 +13,11 @@ etiket::etiket(QWidget *parent) : QLabel(parent)
     setAcceptDrops(true);  //Sürükle bırak özelliği verilir.
     //Formun accepsDropu false olacak . Bu nesnenin sürükle bırakılmasını sağlar
 }
+
+/*etiket::etiket(MainWindow *frm,QWidget *parent) : QLabel(parent)
+{
+    anafrm = frm;
+}  */
 
 void etiket::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -24,23 +32,58 @@ void etiket::dropEvent(QDropEvent *event)
     // etiket sınıfından oluşan nesnelerin gelmesini sağlarız
     // event->source() => Sadece sürüklenen nesnenin yolunu almamızı sağlar
 
+
+    int kontrol = 0;
+
     if(gelen && gelen != this)   //gelen adres dolu ise ve kendi adresinden farklı ise bu işlemi gerçekleştir deriz.
     {
-        QImage birakilan(pixmap()->toImage());  //Bulunduğu(Sürüklenip bırakılan label) nesnenin imageni alırız
-        setPixmap(QPixmap::fromImage(gelen->pixmap()->toImage()));
-        gelen->setPixmap(QPixmap::fromImage(birakilan));
-        return;
-    }
+        if((gelen->bulunduguindex / 5) == (bulunduguindex / 5))  //Aynı satırdalar mı kontrol
+        {
+            if((gelen->bulunduguindex == bulunduguindex-1 || gelen->bulunduguindex == bulunduguindex+1))  //Yanında mı
+            {
+                kontrol = 1;
+            }
+        }
 
-    QList<QUrl> yollar = event->mimeData()->urls();  //Sürüklenen nesnenin yolları alınır
-    if(yollar.isEmpty()) {
-        return;  //Yollar boş ise return et;
+        else if((gelen->bulunduguindex / 5) == (bulunduguindex / 5 + 1) )  //Üst satırı var mı ve index o satırdaki bir eleman mı kontrolü
+        {
+            if((gelen->bulunduguindex - 6 == bulunduguindex || gelen->bulunduguindex - 5 == bulunduguindex || gelen->bulunduguindex - 4 == bulunduguindex)) //Satırın üstünden bir eleman mı
+            {
+                kontrol = 2;
+            }
+        }
+        else if((gelen->bulunduguindex / 5) == (bulunduguindex / 5 - 1) )  //Alt satırı var mı ve index o satırdaki bir eleman mı kontrolü
+        {
+            if(gelen->bulunduguindex == bulunduguindex - 6 || gelen->bulunduguindex == bulunduguindex - 5 || gelen->bulunduguindex == bulunduguindex - 4) //Satırın üstünden bir eleman mı
+            {
+                kontrol = 3;
+            }
+        }
+        qDebug() << "Gelen İndex:";
+        qDebug() << gelen->bulunduguindex;
+        qDebug() << "İndex:";
+        qDebug() << bulunduguindex;
+
+        qDebug() << "Kontrol:";
+        qDebug() << kontrol;
+
+        int yedek;
+        if(kontrol!= 0)
+        {
+            yedek = bulunduguindex;
+            bulunduguindex = gelen->bulunduguindex;
+            gelen->bulunduguindex = yedek;
+            QImage birakilan(pixmap()->toImage());  //Bulunduğu(Sürüklenip bırakılan label) nesnenin imageni alırız
+            setPixmap(QPixmap::fromImage(gelen->pixmap()->toImage()));
+            gelen->setPixmap(QPixmap::fromImage(birakilan));
+            //return;
+        }
+        qDebug() << "Gelen İndex:";
+        qDebug() << gelen->bulunduguindex;
+        qDebug() << "İndex:";
+        qDebug() << bulunduguindex;
+
     }
-    QString yol = yollar.first().toLocalFile();
-    //ilk yolu alarak toLocalFile => Yerel bir dosya olduğunu söyleriz
-    QImage resim(yol);  //Yolu alarak image de göster.
-    setPixmap(QPixmap::fromImage((resim)));
-    //Sürükleyek bu resmin açılmasını sağlarız.
 }
 
 void etiket::mouseMoveEvent(QMouseEvent *event)

@@ -18,6 +18,7 @@ public:
     ~MainWindow();
     QVector<etiket*> puzzleParcalariList;
     QList<int> resimList;
+    etiket *deneme;
 
 private:
     Ui::MainWindow *ui;
