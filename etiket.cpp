@@ -3,21 +3,18 @@
 //Sürükle bırak işlemlerini yapar
 #include <QDrag>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 
-etiket::etiket(QWidget *parent) : QLabel(parent)
+etiket::etiket(MainWindow *frm,QWidget *parent) : QLabel(parent)
 {
+    anafrm = frm;
     setFrameShape(QFrame :: Box);  //Nesnenin görünmesini sağlar
     setScaledContents(true);  //Labelımız ne kadar büyükse resmi o kadar ölçeklendirilir
     setAcceptDrops(true);  //Sürükle bırak özelliği verilir.
     //Formun accepsDropu false olacak . Bu nesnenin sürükle bırakılmasını sağlar
 }
-
-/*etiket::etiket(MainWindow *frm,QWidget *parent) : QLabel(parent)
-{
-    anafrm = frm;
-}  */
 
 void etiket::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -59,31 +56,77 @@ void etiket::dropEvent(QDropEvent *event)
                 kontrol = 3;
             }
         }
-        qDebug() << "Gelen İndex:";
-        qDebug() << gelen->bulunduguindex;
-        qDebug() << "İndex:";
-        qDebug() << bulunduguindex;
-
-        qDebug() << "Kontrol:";
-        qDebug() << kontrol;
-
-        int yedek;
-        if(kontrol!= 0)
-        {
-            yedek = bulunduguindex;
-            bulunduguindex = gelen->bulunduguindex;
-            gelen->bulunduguindex = yedek;
-            QImage birakilan(pixmap()->toImage());  //Bulunduğu(Sürüklenip bırakılan label) nesnenin imageni alırız
-            setPixmap(QPixmap::fromImage(gelen->pixmap()->toImage()));
-            gelen->setPixmap(QPixmap::fromImage(birakilan));
-            //return;
-        }
-        qDebug() << "Gelen İndex:";
-        qDebug() << gelen->bulunduguindex;
-        qDebug() << "İndex:";
-        qDebug() << bulunduguindex;
-
     }
+
+    qDebug() << "Gelen İndex:";
+    qDebug() << gelen->bulunduguindex;
+    qDebug() << "İndex:";
+    qDebug() << bulunduguindex;
+
+    qDebug() << "Kontrol:";
+    qDebug() << kontrol;
+
+    int yedek = bulunduguindex;
+    int yedekResimIndex = resimIndex;
+    if(kontrol != 0)
+    {
+        QImage birakilan(pixmap()->toImage());  //Bulunduğu(Sürüklenip bırakılan label) nesnenin imageni alırız
+        setPixmap(QPixmap::fromImage(gelen->pixmap()->toImage()));
+        gelen->setPixmap(QPixmap::fromImage(birakilan));
+
+        int yedekpuzzleindex;
+        int gelenyedekpuzzleindex;
+        //int yedekpuzzleindex;
+
+        int resimKontrol=0;
+        for(int i=0;i<anafrm->puzzleParcalariList.length();i++)
+        {
+            if(anafrm->puzzleParcalariList[i] == this){
+                yedekpuzzleindex = i;
+            }
+            else if(anafrm->puzzleParcalariList[i] == gelen) {
+                gelenyedekpuzzleindex = i;
+            }
+        }
+
+        qDebug() << "Değiştirilmeden Önce";
+        for(int i=0;i<anafrm->puzzleParcalariList.length();i++)
+        {
+            qDebug() << anafrm->puzzleParcalariList[i]->resimIndex;
+        }
+
+        this->resimIndex = gelen->resimIndex;
+        gelen->resimIndex = yedekResimIndex;
+
+        qDebug() << "Değiştirildikten Sonra";
+        for(int i=0;i<anafrm->puzzleParcalariList.length();i++)
+        {
+            qDebug() << anafrm->puzzleParcalariList[i]->resimIndex;
+        }
+
+        anafrm->HamleSayisiArttirma();
+    }
+    qDebug() << "Gelen İndex:";
+    qDebug() << gelen->bulunduguindex;
+    qDebug() << "İndex:";
+    qDebug() << bulunduguindex;
+
+
+    int resimKontrol=0;
+    for(int i=0;i<anafrm->puzzleParcalariList.length();i++)
+    {
+        if(anafrm->puzzleParcalariList[i]->resimIndex == i)
+        {
+            resimKontrol++;
+        }
+    }
+
+    if(resimKontrol == 25)
+    {
+        QMessageBox::information(anafrm,"PUZZLE","Puzzle Bitti");  //Yazdığımız sorguyu görmemizi sağlar.
+    }
+
+    return;
 }
 
 void etiket::mouseMoveEvent(QMouseEvent *event)
@@ -96,3 +139,4 @@ void etiket::mouseMoveEvent(QMouseEvent *event)
     suruklenen->exec(Qt::MoveAction);   //drag işleminin başlamasını sağlar
     //Hareket oldukça çalışsın.
 }
+

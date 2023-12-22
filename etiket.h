@@ -12,8 +12,8 @@ class etiket : public QLabel
 {
     Q_OBJECT
 public:
-    explicit etiket(QWidget *parent = nullptr);
-    //explicit etiket(MainWindow *frm,QWidget *parent = nullptr);
+    //explicit etiket(QWidget *parent = nullptr);
+    etiket(MainWindow *frm,QWidget *parent = nullptr);
     int bulunduguindex;
     int resimIndex;
 

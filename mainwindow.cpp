@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    hamleSayisiLabel = ui->HamleSayisi;
     //deneme = new etiket(this,this);
     showMaximized();   //Formu tam ekran aç
     int x = 50;
@@ -32,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
                     }
                 }
             } while(deger > 0);
-            etiket *et = new etiket(this);
+            etiket *et = new etiket(this,this);
             et->setGeometry(x,y,150,150);
             //et->setScaledContents(true); // Resmi QLabel boyutuna sığdır
             QImage resim(":/res/"+QString::number(sayi)+".png");
@@ -55,5 +56,15 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow:: HamleSayisiArttirma()
+{
+    int yedek = hamleSayisiLabel->text().toInt();
+    qDebug() << yedek;
+    yedek++;
+    hamleSayisiLabel->setText(QString::number(yedek));
+    qDebug() << hamleSayisiLabel->text().toInt();
+
 }
 

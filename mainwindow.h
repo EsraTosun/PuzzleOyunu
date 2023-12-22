@@ -19,6 +19,8 @@ public:
     QVector<etiket*> puzzleParcalariList;
     QList<int> resimList;
     etiket *deneme;
+    void HamleSayisiArttirma();
+    QLabel *hamleSayisiLabel;
 
 private:
     Ui::MainWindow *ui;
